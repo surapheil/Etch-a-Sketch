@@ -1,0 +1,45 @@
+
+body{
+    background-color: blueviolet;
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    margin: auto;
+    margin-top: 70px;
+    height: 30rem;
+    width: 30rem;
+}
+
+.slider{
+    -webkit-appearance: none;
+     appearance: none;
+     width: 250px;
+     height: 15px;
+     background: #d3d3d3;
+     outline: none;
+     opacity:0.7;
+     -webkit-transition: 0.2s;
+     transition: opacity 0.2s;
+     border-radius: 5px;
+}
+
+.slider::-webkit-slider-thumb{
+    -webkit-appearance: none;
+     appearance: none;
+     width:25px;
+     height:25px;
+     border-radius: 50%;
+     background: #04AA6D;
+     cursor:pointer;
+}
+
+.slider::-moz-range-thumb{
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    background: #04AA6D;
+    cursor:pointer;
+}
