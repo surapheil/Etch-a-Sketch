@@ -1,13 +1,69 @@
-let defaultSize = 15;
+let defaultSize = 16;
 let currentSize = defaultSize;
 
 
+//call button elements 
+const colorPicker = document.querySelector('.colorPicker');
+const colorBtn = document.querySelector('.colorBtn');
+const rgbBtn = document.querySelector('.rgbBtn');
+const eraserBtn = document.querySelector('.eraserBtn');
+const clearBtn = document.querySelector('.clearBtn');
+//select the range slider
+const slider = document.querySelector('.slider');
+const sizeValue = document.querySelector('.sizeValue');
 
-//create div elment as container
-const div = document.createElement('div');
-div.classList.add('container');//added class of container
+let mouseDown = false
+document.body.onmousedown = () => (mouseDown = true)
+document.body.onmouseup = () => (mouseDown = false)
 
-document.body.appendChild(div);
+
+ let changer = colorPicker.value;
+ let iscolorBtn= false;
+ let isRgbBtn= false;
+ let iseraseBtn = false;
+
+ eraserBtn.addEventListener('click',(e)=>{
+  isRgbBtn= false;
+  iscolorBtn=false;
+  iseraseBtn = true;
+ });
+ rgbBtn.addEventListener('click',(e)=>{
+  iseraseBtn = false;
+  iscolorBtn =false;
+  isRgbBtn =true;
+ });
+ colorPicker.addEventListener('change',(e)=>{
+  isRgbBtn=false;
+  iseraseBtn = false;
+  iscolorBtn = false;
+  changer = e.target.value;
+
+ });
+clearBtn.onclick = (e) => reloadGrid();
+
+colorBtn.addEventListener('click',(e)=>{
+  isRgbBtn=false;
+  iseraseBtn=false;
+  iscolorBtn=true;
+})
+
+function rgbColorsMaker(){
+  let red = Math.floor(Math.random()*256);
+  let green = Math.floor(Math.random()*256);
+  let blue= Math.floor(Math.random()*256);
+   return `rgb(${red},${green},${blue})`;
+}
+
+function eraserMaker(){
+  return 'white';
+}
+
+
+function defaultColor(){
+  return 'black';
+}
+
+
 
 const  container = document.querySelector('.container');
 container.style.cssText='background-color:white;'
@@ -17,15 +73,14 @@ function setCurrentSize(newSize){
 
 }
 
-//select the range slider
-const slider = document.querySelector('.slider');
-const sizeValue = document.querySelector('sizeValue');
 
-//slider.onmousemove = (e) => updateSizeValue(e.target.value);
+slider.onmousemove = (e) => updateSizeValue(e.target.value);
 slider.onchange =(e) => changeSize(e.target.value);
 
+
+
 function changeSize(value){
-  //updateSizeValue(value);
+  updateSizeValue(value);
   setCurrentSize(value);
   reloadGrid(value);
 
@@ -33,15 +88,15 @@ function changeSize(value){
 
 
 
-/*function updateSizeValue(value){
+
+function updateSizeValue(value){
   sizeValue.innerHTML = `${value} X ${value}`;
-  
-}*/
+ 
+}
 
 
 function reloadGrid(){
-  clearGrid()
-
+  clearGrid();
   gridMaker(currentSize);
 }
 
@@ -49,16 +104,9 @@ function reloadGrid(){
 function gridMaker(squares){ //making the grids using div elements
 
   //width and height of grid items
-  const cellWidth = (30/squares) +'rem';
-  const cellHeight = (30/squares) +'rem';
+  const cellWidth = (36/squares) +'rem';
+  const cellHeight = (36/squares) +'rem';
   
-
- //set the height and width of column and row
- 
-  //const content = [];
-
-
-    //squares = parseInt(prompt('Enter the number of squares you want:'));
 
     for(let i=0; i < (squares); i++){ // creates a div element with each iteration
         const content =document.createElement('div');
@@ -80,7 +128,7 @@ function gridMaker(squares){ //making the grids using div elements
         widthAndHeight.value = `width: ${cellWidth}; height: ${cellHeight};`;
         //appending to the child div
         newDiv.setAttributeNode(widthAndHeight);
-        //appen to the container
+        //append to the container
         content.appendChild(newDiv);
 
 
@@ -96,12 +144,40 @@ function clearGrid(){
 }
 
 
-
+const newDiv = document.querySelectorAll('.cell');
 
 function onGrid(){
     let gridPixels = document.querySelectorAll('.cell');
-    gridPixels.forEach(newDiv=>newDiv.addEventListener('mouseover',()=>
-    newDiv.style.backgroundColor='#000000'));
+    gridPixels.forEach(newDiv=>newDiv.addEventListener('mouseover',(e)=>{
+
+     if (e.type === 'mouseover' && !mouseDown) return;
+      if(isRgbBtn){
+        newDiv.style.backgroundColor = rgbColorsMaker();
+      }
+      else if(iseraseBtn){
+        newDiv.style.backgroundColor = eraserMaker();
+      }
+      else if(iscolorBtn){
+        newDiv.style.backgroundColor = defaultColor();
+      }
+      else{
+        newDiv.style.backgroundColor = changer;
+      }
+    }));
+    gridPixels.forEach(newDiv => newDiv.addEventListener('mousedown',(e)=>{
+      if(isRgbBtn){
+        newDiv.style.backgroundColor = rgbColorsMaker();
+      }
+      else if(iseraseBtn){
+        newDiv.style.backgroundColor = eraserMaker();
+      }
+      else if(iscolorBtn){
+        newDiv.style.backgroundColor = defaultColor();
+      }
+      else{
+        newDiv.style.backgroundColor = changer;
+      }
+    }));
 }
 
 
